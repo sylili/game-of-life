@@ -24,10 +24,18 @@
 }
 
   .wrapper {
+
     grid-template-columns: repeat(10, 1fr);
     margin: auto;
     display: grid;
     width: fit-content;
+  }
+
+  .board{
+    display: flex;
+    margin: 20px;
+    align-items: center;
+    flex-direction: column;
   }
 
   .cell{
@@ -41,4 +49,24 @@
 
   .button{
     margin: auto;
+  }
+
+  .buttons{
+    margin: 20px;
+    display: flex;
+    align-content: space-between;
+    justify-content: center;
+    align-items: start;
+    justify-items: center;
+  }
+  
+  .resultMessage{
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  
+  button{
+    margin: 10px;
   }

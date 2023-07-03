@@ -1,21 +1,8 @@
-class Table {
-  static to2DArray(data, columns) {
-    const newArr = [];
-    while (data.length) {
-      newArr.push(data.splice(0, columns));
-    }
-    return newArr;
-  }
+import { to1DArray, to2DArray } from "./helper";
 
-  static to1DArray(data) {
-    const newArray = data.flat();
-    return newArray;
-  }
-}
-
-export const getNextStep = (board, columns) => {
-  const table = Table.to2DArray([...board], columns);
-  let nextState = Table.to2DArray([...board], columns);
+export const getNextState = (board, columns) => {
+  const table = to2DArray([...board], columns);
+  let nextState = to2DArray([...board], columns);
 
   for (let i = 0; i < table.length; i++) {
     for (let j = 0; j < table[0].length; j++) {
@@ -34,7 +21,7 @@ export const getNextStep = (board, columns) => {
     }
   }
 
-  nextState = Table.to1DArray(nextState);
+  nextState = to1DArray(nextState);
   return nextState;
 };
 
