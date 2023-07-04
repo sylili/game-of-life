@@ -37,3 +37,13 @@ export const getMessage = (state) => {
       return null;
   }
 };
+
+export const countAlive = (board) => {
+  let count = 0;
+  for (const cell of board) {
+    if (cell) {
+      count++;
+    }
+  }
+  return count;
+};
