@@ -22,10 +22,7 @@ function App() {
   const [animation, setAnimation] = useState(STOPPED);
   const [generationCount, setGenerationCount] = useState(0);
   const [aliveCount, setAliveCount] = useState(0);
-  const [resetBoard, setResetBoard] = useState({
-    board: defBoard,
-    hasBeenSet: false,
-  });
+  const [resetBoard, setResetBoard] = useState(defBoard);
 
   useEffect(() => {
     setAliveCount(() => countAlive(board));
@@ -36,10 +33,10 @@ function App() {
     setBoard((prev) => {
       const next = [...prev];
       next[i] = !next[i];
+      setResetBoard(() => {
+        return next;
+      });
       return next;
-    });
-    setResetBoard(() => {
-      return { board: defBoard, hasBeenSet: false };
     });
   };
 
@@ -47,12 +44,7 @@ function App() {
     return <Cell alive={board[i]} key={i} pos={i} setPosition={setPosition} />;
   });
 
-  const handleNextClick = async () => {
-    if (!resetBoard.hasBeenSet) {
-      setResetBoard(() => {
-        return { board: [...board], hasBeenSet: true };
-      });
-    }
+  const handleNextClick = () => {
     setGenerationCount((generationCount) => generationCount + 1);
     setBoard((prev) => {
       return getNextState(prev, columns);
@@ -60,12 +52,6 @@ function App() {
   };
 
   const handlePlayClick = () => {
-    if (!resetBoard.hasBeenSet) {
-      setResetBoard(() => {
-        return { board: [...board], hasBeenSet: true };
-      });
-    }
-
     setAnimation((prev) =>
       prev === OSCILLATOR || prev === IN_PROGRESS ? STOPPED : IN_PROGRESS
     );
@@ -77,13 +63,13 @@ function App() {
     setGenerationCount(() => 0);
     setAliveCount(() => 0);
     setResetBoard(() => {
-      return { board: defBoard, hasBeenSet: false };
+      return defBoard;
     });
   };
 
   const handleResetBoard = () => {
     setAnimation(() => STOPPED);
-    setBoard(() => resetBoard.board);
+    setBoard(() => resetBoard);
     setGenerationCount(() => 0);
   };
 
