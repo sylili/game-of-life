@@ -13,8 +13,13 @@ import {
   isBoardStagnates,
 } from "../helper";
 
+import { Button } from "./Button";
+import { Wrapper } from "./Wrapper";
+import { BoardControls } from "./BoardControls";
+import { Board } from "./Board";
+
 const rows = 10;
-const columns = 10;
+const columns = 20;
 const defBoard = new Array(rows * columns).fill(false);
 
 function App() {
@@ -62,9 +67,6 @@ function App() {
     setBoard(() => defBoard);
     setGenerationCount(() => 0);
     setAliveCount(() => 0);
-    setResetBoard(() => {
-      return defBoard;
-    });
   };
 
   const handleResetBoard = () => {
@@ -106,21 +108,29 @@ function App() {
 
   return (
     <div className="App">
-      <div className="board">
-        <p>Welcome to The Game of Life!</p>
-        <div>
-          <p>Generation count: {generationCount}</p>
-          <p>Size of population: {aliveCount}</p>
+      <Board>
+        <BoardControls>
+          <h2>Welcome to The Game of Life!</h2>
+          <h4>Generation count: {generationCount}</h4>
+          <h4>Size of population: {aliveCount}</h4>
+          <div className="buttons">
+            <Button primary onClick={handleNextClick}>
+              Next
+            </Button>
+            <Button primary onClick={handlePlayClick}>
+              {animation === OSCILLATOR || animation === IN_PROGRESS
+                ? "Stop"
+                : "Play"}
+            </Button>
+            <Button onClick={handleClearBoard}>Clear board</Button>
+            <Button onClick={handleResetBoard}>Reset board</Button>
+          </div>
+        </BoardControls>
+        <div className="board">
+          <Wrapper columns={columns}>{grid}</Wrapper>
+          <div className="resultMessage">{getMessage(animation)}</div>
         </div>
-        <div className="wrapper">{grid}</div>
-      </div>
-      <div className="buttons">
-        <button onClick={handleNextClick}>Next</button>
-        <button onClick={handlePlayClick}>Play/Stop</button>
-        <button onClick={handleClearBoard}>Clear board</button>
-        <button onClick={handleResetBoard}>Reset board</button>
-      </div>
-      <div className="resultMessage">{getMessage(animation)}</div>
+      </Board>
     </div>
   );
 }

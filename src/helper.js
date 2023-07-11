@@ -1,3 +1,9 @@
+export const IN_PROGRESS = "inProgress";
+export const STOPPED = "stopped";
+export const OSCILLATOR = "oscillator";
+export const STILL_LIFE = "stillLife";
+export const EMPTY = "empty";
+
 export const isBoardStagnates = (prev, next) => {
   return JSON.stringify(prev) === JSON.stringify(next) ? true : false;
 };
@@ -14,12 +20,6 @@ export const to1DArray = (data) => {
   const newArray = data.flat();
   return newArray;
 };
-
-export const IN_PROGRESS = "inProgress";
-export const STOPPED = "stopped";
-export const OSCILLATOR = "oscillator";
-export const STILL_LIFE = "stillLife";
-export const EMPTY = "empty";
 
 export const getMessage = (state) => {
   switch (state) {

@@ -1,13 +1,13 @@
 
 .App-header {
-  background-color: #282c34;
+  background-color: #003049;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #eae2b7;
 }
 
 .App-link {
@@ -39,12 +39,12 @@
   }
 
   .cell{
-    border: 1px solid gray;
+    border: 1px solid #fcbf49;
     padding: 10px;
   }
 
   .active{
-    background-color: grey;
+    background-color: #fcbf49;
   }
 
   .button{
@@ -61,10 +61,7 @@
   }
   
   .resultMessage{
-    display: flex;
-    align-content: center;
-    flex-wrap: wrap;
-    flex-direction: column;
+    padding: 10px;
   }
   
   button{
