@@ -1,9 +1,18 @@
-function Cell({ alive, pos, setPosition }) {
+function Cell({ mouseDown, alive, pos, setPosition }) {
   const handleClick = () => {
     setPosition(pos);
   };
+  const handleMouseEnter = () => {
+    if (mouseDown) {
+      setPosition(pos);
+    }
+  };
   return (
-    <div className={`cell ${alive && "active"}`} onClick={handleClick}></div>
+    <div
+      className={`cell ${alive && "active"}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseDown={handleClick}
+    ></div>
   );
 }
 

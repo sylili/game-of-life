@@ -17,6 +17,7 @@ import { Button } from "./Button";
 import { Wrapper } from "./Wrapper";
 import { BoardControls } from "./BoardControls";
 import { Board } from "./Board";
+import Chart, { ChartWrapper } from "./Chart";
 
 const rows = 10;
 const columns = 20;
@@ -28,13 +29,25 @@ function App() {
   const [generationCount, setGenerationCount] = useState(0);
   const [aliveCount, setAliveCount] = useState(0);
   const [resetBoard, setResetBoard] = useState(defBoard);
+  const [mouseDown, setMouseDown] = useState(false);
+  const [populationHistory, setPopulationHistory] = useState([]);
+  const [generationHistory, setGenerationHistory] = useState([]);
+
+  useEffect(() => {
+    setPopulationHistory((prev) => {
+      return [...prev, aliveCount];
+    });
+    setGenerationHistory((prev) => {
+      return [...prev, generationCount];
+    });
+  }, [generationCount]);
 
   useEffect(() => {
     setAliveCount(() => countAlive(board));
   }, [board]);
 
   const setPosition = (i) => {
-    setGenerationCount(() => 0);
+    setGenerationCount(0);
     setBoard((prev) => {
       const next = [...prev];
       next[i] = !next[i];
@@ -46,7 +59,15 @@ function App() {
   };
 
   const grid = defBoard.map((cell, i) => {
-    return <Cell alive={board[i]} key={i} pos={i} setPosition={setPosition} />;
+    return (
+      <Cell
+        mouseDown={mouseDown}
+        alive={board[i]}
+        key={i}
+        pos={i}
+        setPosition={setPosition}
+      />
+    );
   });
 
   const handleNextClick = () => {
@@ -63,16 +84,16 @@ function App() {
   };
 
   const handleClearBoard = () => {
-    setAnimation(() => STOPPED);
-    setBoard(() => defBoard);
-    setGenerationCount(() => 0);
-    setAliveCount(() => 0);
+    setAnimation(STOPPED);
+    setBoard(defBoard);
+    setGenerationCount(0);
+    setAliveCount(0);
   };
 
   const handleResetBoard = () => {
-    setAnimation(() => STOPPED);
-    setBoard(() => resetBoard);
-    setGenerationCount(() => 0);
+    setAnimation(STOPPED);
+    setBoard(resetBoard);
+    setGenerationCount(0);
   };
 
   useEffect(() => {
@@ -93,7 +114,6 @@ function App() {
             ) {
               setAnimation(() => OSCILLATOR);
             }
-
             return getNextState(prev, columns);
           });
         }, 230);
@@ -127,10 +147,31 @@ function App() {
           </div>
         </BoardControls>
         <div className="board">
-          <Wrapper columns={columns}>{grid}</Wrapper>
+          <Wrapper
+            columns={columns}
+            onMouseDown={() => {
+              setMouseDown(true);
+            }}
+            onMouseUp={() => {
+              setMouseDown(false);
+            }}
+            onMouseLeave={() => {
+              setMouseDown(false);
+            }}
+          >
+            {grid}
+          </Wrapper>
           <div className="resultMessage">{getMessage(animation)}</div>
         </div>
       </Board>
+      <ChartWrapper>
+        {
+          <Chart
+            populationHistory={populationHistory}
+            generationHistory={generationHistory}
+          />
+        }
+      </ChartWrapper>
     </div>
   );
 }
