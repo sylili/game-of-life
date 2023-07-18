@@ -22,39 +22,44 @@ import Chart, { ChartWrapper } from "./Chart";
 const rows = 10;
 const columns = 20;
 const defBoard = new Array(rows * columns).fill(false);
+const defBoardData = {
+  board: defBoard,
+  generationCount: 0,
+  generationHistory: [],
+  aliveCount: 0,
+  populationHistory: [],
+};
 
 function App() {
-  const [board, setBoard] = useState(defBoard);
   const [animation, setAnimation] = useState(STOPPED);
-  const [generationCount, setGenerationCount] = useState(0);
-  const [aliveCount, setAliveCount] = useState(0);
   const [resetBoard, setResetBoard] = useState(defBoard);
   const [mouseDown, setMouseDown] = useState(false);
-  const [populationHistory, setPopulationHistory] = useState([]);
-  const [generationHistory, setGenerationHistory] = useState([]);
+  const [boardData, setBoardData] = useState(defBoardData);
 
   useEffect(() => {
-    setPopulationHistory((prev) => {
-      return [...prev, aliveCount];
+    setBoardData((prev) => {
+      return {
+        ...prev,
+        populationHistory: [...prev.populationHistory, prev.aliveCount],
+        generationHistory: [...prev.generationHistory, prev.generationCount],
+      };
     });
-    setGenerationHistory((prev) => {
-      return [...prev, generationCount];
-    });
-  }, [generationCount]);
-
-  useEffect(() => {
-    setAliveCount(() => countAlive(board));
-  }, [board]);
+  }, [boardData.generationCount]);
 
   const setPosition = (i) => {
-    setGenerationCount(0);
-    setBoard((prev) => {
-      const next = [...prev];
-      next[i] = !next[i];
+    setBoardData((prev) => {
+      const nextBoard = [...prev.board];
+      nextBoard[i] = !nextBoard[i];
       setResetBoard(() => {
-        return next;
+        return nextBoard;
       });
-      return next;
+
+      return {
+        ...prev,
+        board: nextBoard,
+        generationCount: 0,
+        aliveCount: countAlive(nextBoard),
+      };
     });
   };
 
@@ -62,7 +67,7 @@ function App() {
     return (
       <Cell
         mouseDown={mouseDown}
-        alive={board[i]}
+        alive={boardData.board[i]}
         key={i}
         pos={i}
         setPosition={setPosition}
@@ -71,9 +76,14 @@ function App() {
   });
 
   const handleNextClick = () => {
-    setGenerationCount((generationCount) => generationCount + 1);
-    setBoard((prev) => {
-      return getNextState(prev, columns);
+    setBoardData((prev) => {
+      const nextBoard = getNextState(prev.board, columns);
+      return {
+        ...prev,
+        generationCount: prev.generationCount + 1,
+        board: nextBoard,
+        aliveCount: countAlive(nextBoard),
+      };
     });
   };
 
@@ -84,37 +94,49 @@ function App() {
   };
 
   const handleClearBoard = () => {
+    setBoardData({
+      ...boardData,
+      board: defBoard,
+      generationCount: 0,
+      aliveCount: 0,
+    });
     setAnimation(STOPPED);
-    setBoard(defBoard);
-    setGenerationCount(0);
-    setAliveCount(0);
   };
 
   const handleResetBoard = () => {
     setAnimation(STOPPED);
-    setBoard(resetBoard);
-    setGenerationCount(0);
+
+    setBoardData({
+      ...boardData,
+      board: resetBoard,
+      aliveCount: countAlive(resetBoard),
+      generationCount: 0,
+    });
   };
 
   useEffect(() => {
     if (animation === IN_PROGRESS || animation === OSCILLATOR) {
       const playAnimation = () =>
         setInterval(() => {
-          setGenerationCount((generationCount) => generationCount + 1);
-          setBoard((prev) => {
-            let nextStep = getNextState(prev, columns);
-            if (isBoardStagnates(prev, defBoard)) {
+          setBoardData((prev) => {
+            const nextBoard = getNextState(prev.board, columns);
+            if (isBoardStagnates(prev.board, defBoard)) {
               setAnimation(() => EMPTY);
               return prev;
-            } else if (isBoardStagnates(prev, nextStep)) {
+            } else if (isBoardStagnates(prev.board, nextBoard)) {
               setAnimation(() => STILL_LIFE);
               return prev;
             } else if (
-              isBoardStagnates(prev, getNextState(nextStep, columns))
+              isBoardStagnates(prev.board, getNextState(nextBoard, columns))
             ) {
               setAnimation(() => OSCILLATOR);
             }
-            return getNextState(prev, columns);
+            return {
+              ...prev,
+              board: nextBoard,
+              generationCount: prev.generationCount + 1,
+              aliveCount: countAlive(nextBoard),
+            };
           });
         }, 230);
 
@@ -131,8 +153,8 @@ function App() {
       <Board>
         <BoardControls>
           <h2>Welcome to The Game of Life!</h2>
-          <h4>Generation count: {generationCount}</h4>
-          <h4>Size of population: {aliveCount}</h4>
+          <h4>Generation count: {boardData.generationCount}</h4>
+          <h4>Size of population: {boardData.aliveCount}</h4>
           <div className="buttons">
             <Button primary onClick={handleNextClick}>
               Next
@@ -167,8 +189,8 @@ function App() {
       <ChartWrapper>
         {
           <Chart
-            populationHistory={populationHistory}
-            generationHistory={generationHistory}
+            populationHistory={boardData.populationHistory}
+            generationHistory={boardData.generationHistory}
           />
         }
       </ChartWrapper>
