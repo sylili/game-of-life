@@ -28,6 +28,7 @@ const defBoardData = {
   generationHistory: [],
   aliveCount: 0,
   populationHistory: [],
+  boardHistory: new Set(),
 };
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
         board: nextBoard,
         generationCount: 0,
         aliveCount: countAlive(nextBoard),
+        boardHistory: new Set(),
       };
     });
   };
@@ -99,6 +101,9 @@ function App() {
       board: defBoard,
       generationCount: 0,
       aliveCount: 0,
+      generationHistory: [],
+      populationHistory: [],
+      boardHistory: new Set(),
     });
     setAnimation(STOPPED);
   };
@@ -111,6 +116,9 @@ function App() {
       board: resetBoard,
       aliveCount: countAlive(resetBoard),
       generationCount: 0,
+      generationHistory: [],
+      populationHistory: [],
+      boardHistory: new Set(),
     });
   };
 
@@ -119,16 +127,16 @@ function App() {
       const playAnimation = () =>
         setInterval(() => {
           setBoardData((prev) => {
+            prev.boardHistory.add(JSON.stringify(prev.board));
             const nextBoard = getNextState(prev.board, columns);
-            if (isBoardStagnates(prev.board, defBoard)) {
-              setAnimation(() => EMPTY);
-              return prev;
-            } else if (isBoardStagnates(prev.board, nextBoard)) {
-              setAnimation(() => STILL_LIFE);
-              return prev;
-            } else if (
-              isBoardStagnates(prev.board, getNextState(nextBoard, columns))
-            ) {
+            if (prev.boardHistory.has(JSON.stringify(nextBoard))) {
+              if (isBoardStagnates(prev.board, defBoard)) {
+                setAnimation(() => EMPTY);
+                return prev;
+              } else if (isBoardStagnates(prev.board, nextBoard)) {
+                setAnimation(() => STILL_LIFE);
+                return prev;
+              }
               setAnimation(() => OSCILLATOR);
             }
             return {
