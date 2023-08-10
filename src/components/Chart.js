@@ -19,7 +19,7 @@ ChartJS.register(
   Legend
 );
 
-export const ChartWrapper = styled.section`
+const ChartWrapper = styled.section`
   margin: 0 auto;
   max-width: 800px;
 `;
@@ -98,7 +98,11 @@ function Chart({ populationHistory, generationHistory }) {
     ],
   };
 
-  return <Bar options={options} data={data} />;
+  return (
+    <ChartWrapper>
+      <Bar options={options} data={data} />
+    </ChartWrapper>
+  );
 }
 
 export default Chart;

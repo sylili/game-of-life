@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "../App.css";
 import Cell from "./Cell";
 import { getNextState } from "../logic";
 import {
@@ -13,27 +12,26 @@ import {
   isBoardStagnates,
 } from "../helper";
 
-import { Button } from "./Button";
 import { Wrapper } from "./Wrapper";
-import { BoardControls } from "./BoardControls";
+import BoardControls from "./BoardControls";
 import { Board } from "./Board";
-import Chart, { ChartWrapper } from "./Chart";
+import Chart from "./Chart";
 
 const rows = 10;
 const columns = 20;
-const defBoard = new Array(rows * columns).fill(false);
+const emptyBoard = new Array(rows * columns).fill(false);
 const defBoardData = {
-  board: defBoard,
+  board: emptyBoard,
   generationCount: 0,
   generationHistory: [],
   aliveCount: 0,
   populationHistory: [],
   boardHistory: new Set(),
+  isRunning: STOPPED,
 };
 
 function App() {
-  const [animation, setAnimation] = useState(STOPPED);
-  const [resetBoard, setResetBoard] = useState(defBoard);
+  const [resetBoard, setResetBoard] = useState(emptyBoard);
   const [mouseDown, setMouseDown] = useState(false);
   const [boardData, setBoardData] = useState(defBoardData);
 
@@ -65,7 +63,7 @@ function App() {
     });
   };
 
-  const grid = defBoard.map((cell, i) => {
+  const grid = emptyBoard.map((cell, i) => {
     return (
       <Cell
         mouseDown={mouseDown}
@@ -77,67 +75,32 @@ function App() {
     );
   });
 
-  const handleNextClick = () => {
-    setBoardData((prev) => {
-      const nextBoard = getNextState(prev.board, columns);
-      return {
-        ...prev,
-        generationCount: prev.generationCount + 1,
-        board: nextBoard,
-        aliveCount: countAlive(nextBoard),
-      };
-    });
-  };
-
-  const handlePlayClick = () => {
-    setAnimation((prev) =>
-      prev === OSCILLATOR || prev === IN_PROGRESS ? STOPPED : IN_PROGRESS
-    );
-  };
-
-  const handleClearBoard = () => {
-    setBoardData({
-      ...boardData,
-      board: defBoard,
-      generationCount: 0,
-      aliveCount: 0,
-      generationHistory: [],
-      populationHistory: [],
-      boardHistory: new Set(),
-    });
-    setAnimation(STOPPED);
-  };
-
-  const handleResetBoard = () => {
-    setAnimation(STOPPED);
-
-    setBoardData({
-      ...boardData,
-      board: resetBoard,
-      aliveCount: countAlive(resetBoard),
-      generationCount: 0,
-      generationHistory: [],
-      populationHistory: [],
-      boardHistory: new Set(),
-    });
-  };
-
   useEffect(() => {
-    if (animation === IN_PROGRESS || animation === OSCILLATOR) {
+    if (
+      boardData.isRunning === IN_PROGRESS ||
+      boardData.isRunning === OSCILLATOR
+    ) {
       const playAnimation = () =>
         setInterval(() => {
           setBoardData((prev) => {
             prev.boardHistory.add(JSON.stringify(prev.board));
             const nextBoard = getNextState(prev.board, columns);
             if (prev.boardHistory.has(JSON.stringify(nextBoard))) {
-              if (isBoardStagnates(prev.board, defBoard)) {
-                setAnimation(() => EMPTY);
-                return prev;
+              if (isBoardStagnates(prev.board, emptyBoard)) {
+                return {
+                  ...prev,
+                  isRunning: EMPTY,
+                };
               } else if (isBoardStagnates(prev.board, nextBoard)) {
-                setAnimation(() => STILL_LIFE);
-                return prev;
+                return {
+                  ...prev,
+                  isRunning: STILL_LIFE,
+                };
               }
-              setAnimation(() => OSCILLATOR);
+              return {
+                ...prev,
+                isRunning: OSCILLATOR,
+              };
             }
             return {
               ...prev,
@@ -154,29 +117,19 @@ function App() {
         clearInterval(timer);
       };
     }
-  }, [animation]);
+  }, [boardData.isRunning]);
 
   return (
     <div className="App">
       <Board>
-        <BoardControls>
-          <h2>Welcome to The Game of Life!</h2>
-          <h4>Generation count: {boardData.generationCount}</h4>
-          <h4>Size of population: {boardData.aliveCount}</h4>
-          <div className="buttons">
-            <Button primary onClick={handleNextClick}>
-              Next
-            </Button>
-            <Button primary onClick={handlePlayClick}>
-              {animation === OSCILLATOR || animation === IN_PROGRESS
-                ? "Stop"
-                : "Play"}
-            </Button>
-            <Button onClick={handleClearBoard}>Clear board</Button>
-            <Button onClick={handleResetBoard}>Reset board</Button>
-          </div>
-        </BoardControls>
-        <div className="board">
+        <BoardControls
+          boardData={boardData}
+          setBoardData={setBoardData}
+          columns={columns}
+          defBoard={emptyBoard}
+          resetBoard={resetBoard}
+        />
+        <div>
           <Wrapper
             columns={columns}
             onMouseDown={() => {
@@ -191,17 +144,13 @@ function App() {
           >
             {grid}
           </Wrapper>
-          <div className="resultMessage">{getMessage(animation)}</div>
+          <div className="resultMessage">{getMessage(boardData.isRunning)}</div>
         </div>
       </Board>
-      <ChartWrapper>
-        {
-          <Chart
-            populationHistory={boardData.populationHistory}
-            generationHistory={boardData.generationHistory}
-          />
-        }
-      </ChartWrapper>
+      <Chart
+        populationHistory={boardData.populationHistory}
+        generationHistory={boardData.generationHistory}
+      />
     </div>
   );
 }
