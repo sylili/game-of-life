@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Cell from "./Cell";
 import { getNextState } from "../logic";
 import {
   EMPTY,
@@ -8,18 +7,19 @@ import {
   STILL_LIFE,
   STOPPED,
   countAlive,
-  getMessage,
   isBoardStagnates,
 } from "../helper";
 
-import { Wrapper } from "./Wrapper";
 import BoardControls from "./BoardControls";
-import { Board } from "./Board";
 import Chart from "./Chart";
+import Grid from "./Grid";
+import ResultMessage from "./ResultMessage";
+import { styled } from "styled-components";
 
 const rows = 10;
 const columns = 20;
 const emptyBoard = new Array(rows * columns).fill(false);
+
 const defBoardData = {
   board: emptyBoard,
   generationCount: 0,
@@ -30,9 +30,26 @@ const defBoardData = {
   isRunning: STOPPED,
 };
 
+const Container = styled.section`
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20px;
+  color: white;
+`;
+
+const H2 = styled.section`
+  color: white;
+  display: flex;
+  justify-content: center;
+  font-size: larger;
+  font-weight: 700;
+  padding: 1.5em;
+`;
+
 function App() {
   const [resetBoard, setResetBoard] = useState(emptyBoard);
-  const [mouseDown, setMouseDown] = useState(false);
   const [boardData, setBoardData] = useState(defBoardData);
 
   useEffect(() => {
@@ -44,36 +61,6 @@ function App() {
       };
     });
   }, [boardData.generationCount]);
-
-  const setPosition = (i) => {
-    setBoardData((prev) => {
-      const nextBoard = [...prev.board];
-      nextBoard[i] = !nextBoard[i];
-      setResetBoard(() => {
-        return nextBoard;
-      });
-
-      return {
-        ...prev,
-        board: nextBoard,
-        generationCount: 0,
-        aliveCount: countAlive(nextBoard),
-        boardHistory: new Set(),
-      };
-    });
-  };
-
-  const grid = emptyBoard.map((cell, i) => {
-    return (
-      <Cell
-        mouseDown={mouseDown}
-        alive={boardData.board[i]}
-        key={i}
-        pos={i}
-        setPosition={setPosition}
-      />
-    );
-  });
 
   useEffect(() => {
     if (
@@ -99,7 +86,10 @@ function App() {
               }
               return {
                 ...prev,
+                board: nextBoard,
+                generationCount: prev.generationCount + 1,
                 isRunning: OSCILLATOR,
+                aliveCount: countAlive(nextBoard),
               };
             }
             return {
@@ -120,8 +110,9 @@ function App() {
   }, [boardData.isRunning]);
 
   return (
-    <div className="App">
-      <Board>
+    <div>
+      <H2>Welcome to The Game of Life!</H2>
+      <Container>
         <BoardControls
           boardData={boardData}
           setBoardData={setBoardData}
@@ -129,28 +120,19 @@ function App() {
           defBoard={emptyBoard}
           resetBoard={resetBoard}
         />
-        <div>
-          <Wrapper
-            columns={columns}
-            onMouseDown={() => {
-              setMouseDown(true);
-            }}
-            onMouseUp={() => {
-              setMouseDown(false);
-            }}
-            onMouseLeave={() => {
-              setMouseDown(false);
-            }}
-          >
-            {grid}
-          </Wrapper>
-          <div className="resultMessage">{getMessage(boardData.isRunning)}</div>
-        </div>
-      </Board>
-      <Chart
-        populationHistory={boardData.populationHistory}
-        generationHistory={boardData.generationHistory}
+        <Chart
+          populationHistory={boardData.populationHistory}
+          generationHistory={boardData.generationHistory}
+        />
+      </Container>
+      <Grid
+        boardData={boardData}
+        setBoardData={setBoardData}
+        columns={columns}
+        defBoard={emptyBoard}
+        setResetBoard={setResetBoard}
       />
+      <ResultMessage boardData={boardData} />
     </div>
   );
 }

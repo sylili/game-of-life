@@ -73,7 +73,6 @@ function BoardControls({
 
   return (
     <StyledBoardControls>
-      <h2>Welcome to The Game of Life!</h2>
       <h4>Generation count: {boardData.generationCount}</h4>
       <h4>Size of population: {boardData.aliveCount}</h4>
       <div className="buttons">

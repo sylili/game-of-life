@@ -20,12 +20,14 @@ ChartJS.register(
 );
 
 const ChartWrapper = styled.section`
-  margin: 0 auto;
   max-width: 800px;
+  min-width: 400px;
+  min-height: 300px;
 `;
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false,
   legend: {
     position: "top",
     labels: {

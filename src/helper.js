@@ -24,7 +24,7 @@ export const to1DArray = (data) => {
 export const getMessage = (state) => {
   switch (state) {
     case STOPPED:
-      return null;
+      return "Animation is stopped.";
     case IN_PROGRESS:
       return "Animation in progress...";
     case OSCILLATOR:
