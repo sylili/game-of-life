@@ -73,8 +73,6 @@ function BoardControls({
 
   return (
     <StyledBoardControls>
-      <h4>Generation count: {boardData.generationCount}</h4>
-      <h4>Size of population: {boardData.aliveCount}</h4>
       <div className="buttons">
         <Button primary onClick={handleNextClick}>
           Next
