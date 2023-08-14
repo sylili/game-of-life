@@ -14,15 +14,24 @@ import BoardControls from "./BoardControls";
 import Chart from "./Chart";
 import Grid from "./Grid";
 import ResultMessage from "./ResultMessage";
-import { styled } from "styled-components";
 import { Button } from "./Button";
+import BoardSizer from "./BoardSizer";
+import {
+  A,
+  Container,
+  Description,
+  H2,
+  H4,
+  Spacer1em,
+} from "./StyleComponents";
 
-const rows = 10;
-const columns = 20;
+const rows = 20;
+const columns = 30;
 const emptyBoard = new Array(rows * columns).fill(false);
 
 const defBoardData = {
   board: emptyBoard,
+  columns: columns,
   generationCount: 0,
   generationHistory: [],
   aliveCount: 0,
@@ -30,58 +39,6 @@ const defBoardData = {
   boardHistory: new Set(),
   isRunning: STOPPED,
 };
-
-const Container = styled.section`
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  align-items: center;
-  padding: 20px;
-  color: white;
-`;
-
-const H2 = styled.section`
-  color: white;
-  display: flex;
-  justify-content: center;
-  font-size: larger;
-  font-weight: 700;
-  padding: 1.5em;
-`;
-
-const H4 = styled.section`
-  color: white;
-  display: flex;
-  justify-content: center;
-  font-size: medium;
-  font-weight: bold;
-  padding: 1.5em;
-`;
-
-const Spacer2em = styled.section`
-  padding: 2em;
-`;
-
-const Spacer1em = styled.section`
-  padding: 1em;
-`;
-
-const Description = styled.section`
-  display: flex;
-  justify-content: center;
-  max-width: 800px;
-  margin: 0 auto;
-  color: white;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  align-items: center;
-`;
-
-const A = styled.a`
-  color: #f77f00;
-  text-decoration: none;
-`;
 
 function App() {
   const [resetBoard, setResetBoard] = useState(emptyBoard);
@@ -109,9 +66,14 @@ function App() {
         setInterval(() => {
           setBoardData((prev) => {
             prev.boardHistory.add(JSON.stringify(prev.board));
-            const nextBoard = getNextState(prev.board, columns);
+            const nextBoard = getNextState(prev.board, boardData.columns);
             if (prev.boardHistory.has(JSON.stringify(nextBoard))) {
-              if (isBoardStagnates(prev.board, emptyBoard)) {
+              if (
+                isBoardStagnates(
+                  prev.board,
+                  new Array(prev.board.length).fill(false)
+                )
+              ) {
                 return {
                   ...prev,
                   isRunning: EMPTY,
@@ -145,7 +107,25 @@ function App() {
         clearInterval(timer);
       };
     }
-  }, [boardData.isRunning]);
+  }, [boardData.isRunning, boardData.columns]);
+
+  const boardSizeCallback = (rows, columns) => {
+    setResetBoard(new Array(rows * columns).fill(false));
+    setBoardData((prev) => {
+      const newBoard = new Array(rows * columns).fill(false);
+      return {
+        ...prev,
+        columns: columns,
+        board: newBoard,
+        generationCount: 0,
+        aliveCount: 0,
+        generationHistory: [],
+        populationHistory: [],
+        boardHistory: new Set(),
+        isRunning: STOPPED,
+      };
+    });
+  };
 
   return (
     <div>
@@ -153,6 +133,7 @@ function App() {
       <Button secondary onClick={onClick}>
         {showDesc ? "Hide" : "Show"} description
       </Button>
+
       <div>
         {showDesc && (
           <Description>
@@ -194,30 +175,32 @@ function App() {
         )}
         <Spacer1em />
       </div>
+
       <BoardControls
         boardData={boardData}
         setBoardData={setBoardData}
-        columns={columns}
-        defBoard={emptyBoard}
         resetBoard={resetBoard}
       />
       <Container>
         <div>
-          <H4>Generation count: {boardData.generationCount}</H4>
-          <H4>Size of population: {boardData.aliveCount}</H4>
-
-          <Spacer2em />
+          <div>
+            <H4>Generation count: {boardData.generationCount}</H4>
+            <H4>Size of population: {boardData.aliveCount}</H4>
+          </div>
+          <Spacer1em />
           <Chart
             populationHistory={boardData.populationHistory}
             generationHistory={boardData.generationHistory}
           />
         </div>
         <div>
+          <BoardSizer
+            boardData={boardData}
+            boardSizeCallback={boardSizeCallback}
+          />
           <Grid
             boardData={boardData}
             setBoardData={setBoardData}
-            columns={columns}
-            defBoard={emptyBoard}
             setResetBoard={setResetBoard}
           />
           <ResultMessage boardData={boardData} />

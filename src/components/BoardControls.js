@@ -10,16 +10,10 @@ const StyledBoardControls = styled.section`
   justify-content: space-around;
 `;
 
-function BoardControls({
-  boardData,
-  setBoardData,
-  columns,
-  defBoard,
-  resetBoard,
-}) {
+function BoardControls({ boardData, setBoardData, resetBoard }) {
   const handleNextClick = () => {
     setBoardData((prev) => {
-      const nextBoard = getNextState(prev.board, columns);
+      const nextBoard = getNextState(prev.board, prev.columns);
       return {
         ...prev,
         generationCount: prev.generationCount + 1,
@@ -48,7 +42,7 @@ function BoardControls({
   const handleClearBoard = () => {
     setBoardData({
       ...boardData,
-      board: defBoard,
+      board: new Array(boardData.board.length).fill(false),
       generationCount: 0,
       aliveCount: 0,
       generationHistory: [],

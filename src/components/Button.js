@@ -11,4 +11,5 @@ export const Button = styled.button`
   border-radius: 3px;
   display: ${(props) => props.secondary && "flex"};
   margin: ${(props) => (props.secondary ? "0 auto" : "1em")};
+  align-items: center;
 `;

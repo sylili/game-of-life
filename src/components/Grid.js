@@ -11,7 +11,7 @@ export const Wrapper = styled.section`
   padding: 20px;
 `;
 
-function Grid({ columns, defBoard, boardData, setBoardData, setResetBoard }) {
+function Grid({ boardData, setBoardData, setResetBoard }) {
   const [mouseDown, setMouseDown] = useState(false);
 
   const setPosition = (i) => {
@@ -32,7 +32,7 @@ function Grid({ columns, defBoard, boardData, setBoardData, setResetBoard }) {
     });
   };
 
-  const grid = defBoard.map((cell, i) => {
+  const grid = boardData.board.map((cell, i) => {
     return (
       <Cell
         mouseDown={mouseDown}
@@ -45,7 +45,7 @@ function Grid({ columns, defBoard, boardData, setBoardData, setResetBoard }) {
   });
   return (
     <Wrapper
-      columns={columns}
+      columns={boardData.columns}
       onMouseDown={() => {
         setMouseDown(true);
       }}
