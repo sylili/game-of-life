@@ -14,16 +14,9 @@ import BoardControls from "./BoardControls";
 import Chart from "./Chart";
 import Grid from "./Grid";
 import ResultMessage from "./ResultMessage";
-import { Button } from "./Button";
+
 import BoardSizer from "./BoardSizer";
-import {
-  A,
-  Container,
-  Description,
-  H2,
-  H4,
-  Spacer1em,
-} from "./StyleComponents";
+import { Container, H2, H4, Spacer1em } from "./StyleComponents";
 import PopupDesc from "./PopupDesc";
 
 const rows = 20;
@@ -44,9 +37,6 @@ const defBoardData = {
 function App() {
   const [resetBoard, setResetBoard] = useState(emptyBoard);
   const [boardData, setBoardData] = useState(defBoardData);
-  const [showDesc, setShowDesc] = useState(true);
-
-  const onClick = () => setShowDesc(!showDesc);
 
   useEffect(() => {
     setBoardData((prev) => {
