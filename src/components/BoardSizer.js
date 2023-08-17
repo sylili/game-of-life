@@ -1,16 +1,20 @@
 import { useState } from "react";
-import { Button } from "./Button";
 import { styled } from "styled-components";
 
 const Form = styled.form`
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
   max-width: 400px;
   margin: 0 auto;
+  align-content: center;
+  color: white;
+  padding: 1em;
 `;
+
+const StyledBoard = styled.section``;
 
 function BoardSizer({ boardData, boardSizeCallback }) {
   const [rows, setRows] = useState(boardData.board.length / boardData.columns);
@@ -26,35 +30,42 @@ function BoardSizer({ boardData, boardSizeCallback }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (rows > 30 || rows < 1 || columns > 30 || columns < 1) {
-      alert("Please enter a valid number between 1-30!");
-      return;
-    } else boardSizeCallback(rows, columns);
+    boardSizeCallback(rows, columns);
   };
   return (
-    <div>
-      <p>
-        You can set the table dimensions between 1-30 for each parameter.
-        Default is 20x30.
-      </p>
+    <StyledBoard>
       <Form>
         <label>
-          Rows:
+          Rows: {rows}
           <br />
-          <input type="number" value={rows} onChange={handleRowChange} />
+          <input
+            type="range"
+            min="1"
+            max="20"
+            onChange={handleRowChange}
+            onMouseUp={handleSubmit}
+            onTouchEnd={handleSubmit}
+            onKeyUp={handleSubmit}
+            value={rows}
+          />
           <br />
         </label>
         <label>
-          Columns:
+          Columns: {columns}
           <br />
-          <input type="number" value={columns} onChange={handleColumnChange} />
+          <input
+            type="range"
+            min="1"
+            max="30"
+            onChange={handleColumnChange}
+            onMouseUp={handleSubmit}
+            onTouchEnd={handleSubmit}
+            onKeyUp={handleSubmit}
+            value={columns}
+          ></input>
         </label>
-        <br />
-        <Button secondary onClick={handleSubmit}>
-          Set
-        </Button>
       </Form>
-    </div>
+    </StyledBoard>
   );
 }
 
