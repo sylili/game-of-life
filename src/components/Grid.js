@@ -5,10 +5,10 @@ import { useState } from "react";
 
 export const Wrapper = styled.section`
   grid-template-columns: repeat(${(props) => props.columns}, 1fr);
-  margin: auto;
+  margin: 0 auto;
   display: grid;
   width: fit-content;
-  padding: 20px;
+  padding: 10px;
 `;
 
 function Grid({ boardData, setBoardData, setResetBoard }) {
@@ -46,13 +46,13 @@ function Grid({ boardData, setBoardData, setResetBoard }) {
   return (
     <Wrapper
       columns={boardData.columns}
-      onMouseDown={() => {
+      onPointerDown={() => {
         setMouseDown(true);
       }}
-      onMouseUp={() => {
+      onPointerUp={() => {
         setMouseDown(false);
       }}
-      onMouseLeave={() => {
+      onPointerLeave={() => {
         setMouseDown(false);
       }}
     >

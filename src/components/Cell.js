@@ -1,9 +1,12 @@
 import { styled } from "styled-components";
 
 const StyledCell = styled.section`
-  border: 1px solid #fcbf49;
-  padding: 10px;
-  background-color: ${(props) => props.alive && "#fcbf49"};
+  border: 1px solid #a5c9ca;
+  padding: 0.65em;
+  background-color: ${(props) => props.alive && "#A5C9CA"};
+  @media (max-width: 768px) {
+    padding: 1.2vw;
+  }
 `;
 
 function Cell({ mouseDown, alive, pos, setPosition }) {
@@ -16,7 +19,7 @@ function Cell({ mouseDown, alive, pos, setPosition }) {
     }
   };
   return (
-    <div onMouseEnter={handleMouseEnter} onMouseDown={handleClick}>
+    <div onPointerEnter={handleMouseEnter} onPointerDown={handleClick}>
       <StyledCell alive={alive} />
     </div>
   );

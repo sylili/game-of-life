@@ -5,9 +5,10 @@ const Container = styled.section`
   color: white;
   display: flex;
   justify-content: center;
-  font-size: medium;
-  font-weight: 500;
-  padding: 1em;
+  font-size: large;
+  font-weight: 700;
+  padding: 1.5em;
+  background-color: #395b64;
 `;
 
 function ResultMessage({ boardData }) {

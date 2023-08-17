@@ -2,29 +2,30 @@ import { styled } from "styled-components";
 
 export const Container = styled.section`
   display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  align-items: center;
+  justify-content: space-around;
+  align-items: flex-start;
   padding: 20px;
   color: white;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: center;
 `;
 
-export const H2 = styled.section`
+export const H2 = styled.h2`
   color: white;
   display: flex;
   justify-content: center;
-  font-size: larger;
   font-weight: 700;
-  padding: 1.5em;
+  padding: 1em 0em 1em 1em;
+  margin: 0px;
 `;
 
-export const H4 = styled.section`
+export const H4 = styled.h4`
   color: white;
   display: flex;
   justify-content: center;
   font-size: medium;
-  font-weight: bold;
-  padding: 1.5em;
+  font-weight: 400;
 `;
 
 export const Spacer2em = styled.section`

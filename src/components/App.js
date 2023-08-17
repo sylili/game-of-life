@@ -9,15 +9,18 @@ import {
   countAlive,
   isBoardStagnates,
 } from "../helper";
-
 import BoardControls from "./BoardControls";
 import Chart from "./Chart";
 import Grid from "./Grid";
 import ResultMessage from "./ResultMessage";
-
 import BoardSizer from "./BoardSizer";
 import { Container, H2, H4, Spacer1em } from "./StyleComponents";
 import PopupDesc from "./PopupDesc";
+import { styled } from "styled-components";
+
+const Container2 = styled.section`
+  max-width: 400px;
+`;
 
 const rows = 20;
 const columns = 30;
@@ -101,9 +104,9 @@ function App() {
   }, [boardData.isRunning, boardData.columns]);
 
   const boardSizeCallback = (rows, columns) => {
-    setResetBoard(new Array(rows * columns).fill(false));
+    const newBoard = new Array(rows * columns).fill(false);
+    setResetBoard(newBoard);
     setBoardData((prev) => {
-      const newBoard = new Array(rows * columns).fill(false);
       return {
         ...prev,
         columns: columns,
@@ -120,38 +123,39 @@ function App() {
 
   return (
     <div>
-      <PopupDesc />
+      <div>
+        <PopupDesc />
+      </div>
       <H2>Welcome to The Game of Life!</H2>
-      <Spacer1em />
-      <BoardControls
-        boardData={boardData}
-        setBoardData={setBoardData}
-        resetBoard={resetBoard}
-      />
+
+      <ResultMessage boardData={boardData} />
+
       <Container>
         <div>
-          <div>
-            <H4>Generation count: {boardData.generationCount}</H4>
-            <H4>Size of population: {boardData.aliveCount}</H4>
-          </div>
-          <Spacer1em />
-          <Chart
-            populationHistory={boardData.populationHistory}
-            generationHistory={boardData.generationHistory}
-          />
-        </div>
-        <div>
-          <BoardSizer
-            boardData={boardData}
-            boardSizeCallback={boardSizeCallback}
-          />
           <Grid
             boardData={boardData}
             setBoardData={setBoardData}
             setResetBoard={setResetBoard}
           />
-          <ResultMessage boardData={boardData} />
+          <BoardControls
+            boardData={boardData}
+            setBoardData={setBoardData}
+            resetBoard={resetBoard}
+          />
         </div>
+        <Container2>
+          <BoardSizer
+            boardData={boardData}
+            boardSizeCallback={boardSizeCallback}
+          />
+          <H4>Generation count: {boardData.generationCount}</H4>
+          <H4>Size of population: {boardData.aliveCount}</H4>
+          <Spacer1em />
+          <Chart
+            populationHistory={boardData.populationHistory}
+            generationHistory={boardData.generationHistory}
+          />
+        </Container2>
       </Container>
     </div>
   );

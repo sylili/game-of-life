@@ -1,6 +1,7 @@
 import Popup from "reactjs-popup";
 import { A, Description } from "./StyleComponents";
 import { styled } from "styled-components";
+import { BsFillQuestionSquareFill } from "react-icons/bs";
 
 const StyledPop = styled(Popup)`
   @keyframes anvil {
@@ -25,10 +26,17 @@ const StyledPop = styled(Popup)`
   }
 `;
 
+const StyledIcon = styled(BsFillQuestionSquareFill)`
+  color: white;
+  height: 1.5em;
+  width: 1.5em;
+  padding: 5px;
+`;
+
 function PopupDesc() {
   return (
     <div style={{ float: "right" }}>
-      <StyledPop modal trigger={<button> ? </button>}>
+      <StyledPop modal trigger={<StyledIcon />} nested>
         <Description>
           <p>
             <A href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">

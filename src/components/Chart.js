@@ -41,7 +41,7 @@ const options = {
     display: true,
     text: "Game history",
     font: { size: 20 },
-    color: "#fcbf49",
+    color: "#E7F6F2",
   },
 
   plugins: {
@@ -95,7 +95,7 @@ function Chart({ populationHistory, generationHistory }) {
         label: "Population",
         data: populationHistory,
         borderColor: "#f77f00",
-        backgroundColor: "#fcbf49",
+        backgroundColor: "#E7F6F2",
       },
     ],
   };
