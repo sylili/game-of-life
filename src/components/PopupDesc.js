@@ -22,7 +22,7 @@ const StyledPop = styled(Popup)`
     -webkit-animation: anvil 0.3s forwards;
   }
   &-overlay {
-    background-color: #003049de;
+    background-color: #002c33e8;
   }
 `;
 

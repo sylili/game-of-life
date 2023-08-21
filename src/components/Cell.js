@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 const StyledCell = styled.section`
-  border: 1px solid #a5c9ca;
+  border: 1px solid #a5c9ca30;
   padding: 0.65em;
   background-color: ${(props) => props.alive && "#A5C9CA"};
   @media (max-width: 768px) {

@@ -50,6 +50,6 @@ export const Description = styled.section`
 `;
 
 export const A = styled.a`
-  color: #f77f00;
+  color: #deff00;
   text-decoration: none;
 `;

@@ -12,6 +12,10 @@ const Form = styled.form`
   align-content: center;
   color: white;
   padding: 1em;
+
+  input[type="range"] {
+    accent-color: #b1c144;
+  }
 `;
 
 const StyledBoard = styled.section``;

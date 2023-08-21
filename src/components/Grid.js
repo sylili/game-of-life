@@ -18,9 +18,7 @@ function Grid({ boardData, setBoardData, setResetBoard }) {
     setBoardData((prev) => {
       const nextBoard = [...prev.board];
       nextBoard[i] = !nextBoard[i];
-      setResetBoard(() => {
-        return nextBoard;
-      });
+      setResetBoard(nextBoard);
 
       return {
         ...prev,
