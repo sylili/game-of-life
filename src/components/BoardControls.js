@@ -77,8 +77,8 @@ function BoardControls({ boardData, setBoardData, resetBoard }) {
             ? "Stop"
             : "Play"}
         </Button>
-        <Button onClick={handleClearBoard}>Clear board</Button>
-        <Button onClick={handleResetBoard}>Reset board</Button>
+        <Button onClick={handleClearBoard}>Clear</Button>
+        <Button onClick={handleResetBoard}>Reset</Button>
       </div>
     </StyledBoardControls>
   );

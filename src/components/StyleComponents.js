@@ -2,13 +2,12 @@ import { styled } from "styled-components";
 
 export const Container = styled.section`
   display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  padding: 20px;
-  color: white;
   flex-wrap: wrap;
-  flex-direction: row;
-  align-content: center;
+  justify-content: center;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-content: flex-start;
 `;
 
 export const H2 = styled.h2`
@@ -52,4 +51,13 @@ export const Description = styled.section`
 export const A = styled.a`
   color: #deff00;
   text-decoration: none;
+`;
+
+export const FlexGrow0 = styled.section`
+  flex-grow: 0;
+  margin: 15px 0px;
+`;
+
+export const FlexGrow1 = styled.section`
+  flex-grow: 1;
 `;

@@ -14,13 +14,15 @@ import Chart from "./Chart";
 import Grid from "./Grid";
 import ResultMessage from "./ResultMessage";
 import BoardSizer from "./BoardSizer";
-import { Container, H2, H4, Spacer1em } from "./StyleComponents";
+import {
+  Container,
+  FlexGrow0,
+  FlexGrow1,
+  H2,
+  H4,
+  Spacer1em,
+} from "./StyleComponents";
 import PopupDesc from "./PopupDesc";
-import { styled } from "styled-components";
-
-const Container2 = styled.section`
-  max-width: 400px;
-`;
 
 const rows = 20;
 const columns = 30;
@@ -127,11 +129,9 @@ function App() {
         <PopupDesc />
       </div>
       <H2>Welcome to The Game of Life!</H2>
-
       <ResultMessage boardData={boardData} />
-
       <Container>
-        <div>
+        <FlexGrow1>
           <Grid
             boardData={boardData}
             setBoardData={setBoardData}
@@ -142,8 +142,8 @@ function App() {
             setBoardData={setBoardData}
             resetBoard={resetBoard}
           />
-        </div>
-        <Container2>
+        </FlexGrow1>
+        <FlexGrow0>
           <BoardSizer
             boardData={boardData}
             boardSizeCallback={boardSizeCallback}
@@ -155,7 +155,7 @@ function App() {
             populationHistory={boardData.populationHistory}
             generationHistory={boardData.generationHistory}
           />
-        </Container2>
+        </FlexGrow0>
       </Container>
     </div>
   );
