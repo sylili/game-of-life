@@ -25,17 +25,17 @@ function BoardSizer({ boardData, boardSizeCallback }) {
   const [columns, setColumns] = useState(boardData.columns);
 
   const handleRowChange = (event) => {
-    setRows(event.target.value);
+    setRows(+event.target.value);
   };
 
   const handleColumnChange = (event) => {
-    setColumns(event.target.value);
+    setColumns(+event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const submit = (event) => {
     boardSizeCallback(rows, columns);
   };
+
   return (
     <StyledBoard>
       <Form>
@@ -47,9 +47,9 @@ function BoardSizer({ boardData, boardSizeCallback }) {
             min="1"
             max="20"
             onChange={handleRowChange}
-            onMouseUp={handleSubmit}
-            onTouchEnd={handleSubmit}
-            onKeyUp={handleSubmit}
+            onMouseUp={submit}
+            onTouchEnd={submit}
+            onKeyUp={submit}
             value={rows}
           />
           <br />
@@ -62,9 +62,9 @@ function BoardSizer({ boardData, boardSizeCallback }) {
             min="1"
             max="30"
             onChange={handleColumnChange}
-            onMouseUp={handleSubmit}
-            onTouchEnd={handleSubmit}
-            onKeyUp={handleSubmit}
+            onMouseUp={submit}
+            onTouchEnd={submit}
+            onKeyUp={submit}
             value={columns}
           ></input>
         </label>
