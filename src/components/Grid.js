@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import Cell from "./Cell";
-import { countAlive } from "../helper";
+import { countAlive } from "../utilities/helper";
 import { useState } from "react";
 
 export const Wrapper = styled.section`

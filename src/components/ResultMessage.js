@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { getMessage } from "../helper";
+import { getMessage } from "../utilities/helper";
 
 const Container = styled.section`
   color: white;

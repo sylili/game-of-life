@@ -1,5 +1,5 @@
 import Popup from "reactjs-popup";
-import { A, Description } from "./StyleComponents";
+import { A, Description } from "../styled/StyleComponents";
 import { styled } from "styled-components";
 import { BsFillQuestionSquareFill } from "react-icons/bs";
 

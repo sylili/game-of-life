@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getNextState } from "../logic";
+import { getNextState } from "../utilities/logic";
 import {
   EMPTY,
   IN_PROGRESS,
@@ -8,7 +8,7 @@ import {
   STOPPED,
   countAlive,
   isBoardStagnates,
-} from "../helper";
+} from "../utilities/helper";
 import BoardControls from "./BoardControls";
 import Chart from "./Chart";
 import Grid from "./Grid";
@@ -21,7 +21,7 @@ import {
   H2,
   H4,
   Spacer1em,
-} from "./StyleComponents";
+} from "../styled/StyleComponents";
 import PopupDesc from "./PopupDesc";
 
 const rows = 20;

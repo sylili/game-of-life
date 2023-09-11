@@ -1,7 +1,12 @@
 import { styled } from "styled-components";
-import { Button } from "./Button";
-import { IN_PROGRESS, OSCILLATOR, STOPPED, countAlive } from "../helper";
-import { getNextState } from "../logic";
+import {
+  IN_PROGRESS,
+  OSCILLATOR,
+  STOPPED,
+  countAlive,
+} from "../utilities/helper";
+import { getNextState } from "../utilities/logic";
+import { Button } from "../styled/StyleComponents";
 
 const StyledBoardControls = styled.section`
   display: flex;
