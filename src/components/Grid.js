@@ -9,6 +9,7 @@ export const Wrapper = styled.section`
   display: grid;
   width: fit-content;
   padding: 10px;
+  user-select: none;
 `;
 
 function Grid({ boardData, setBoardData, setResetBoard }) {
