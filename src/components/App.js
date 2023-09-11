@@ -31,6 +31,7 @@ const emptyBoard = new Array(rows * columns).fill(false);
 const defBoardData = {
   board: emptyBoard,
   columns: columns,
+  rows: rows,
   generationCount: 0,
   generationHistory: [],
   aliveCount: 0,
@@ -42,16 +43,6 @@ const defBoardData = {
 function App() {
   const [resetBoard, setResetBoard] = useState(emptyBoard);
   const [boardData, setBoardData] = useState(defBoardData);
-
-  useEffect(() => {
-    setBoardData((prev) => {
-      return {
-        ...prev,
-        populationHistory: [...prev.populationHistory, prev.aliveCount],
-        generationHistory: [...prev.generationHistory, prev.generationCount],
-      };
-    });
-  }, [boardData.generationCount]);
 
   useEffect(() => {
     if (
@@ -73,11 +64,27 @@ function App() {
                 return {
                   ...prev,
                   isRunning: EMPTY,
+                  populationHistory: [
+                    ...prev.populationHistory,
+                    prev.aliveCount,
+                  ],
+                  generationHistory: [
+                    ...prev.generationHistory,
+                    prev.generationCount,
+                  ],
                 };
               } else if (isBoardStagnates(prev.board, nextBoard)) {
                 return {
                   ...prev,
                   isRunning: STILL_LIFE,
+                  populationHistory: [
+                    ...prev.populationHistory,
+                    prev.aliveCount,
+                  ],
+                  generationHistory: [
+                    ...prev.generationHistory,
+                    prev.generationCount,
+                  ],
                 };
               }
               return {
@@ -86,6 +93,11 @@ function App() {
                 generationCount: prev.generationCount + 1,
                 isRunning: OSCILLATOR,
                 aliveCount: countAlive(nextBoard),
+                populationHistory: [...prev.populationHistory, prev.aliveCount],
+                generationHistory: [
+                  ...prev.generationHistory,
+                  prev.generationCount,
+                ],
               };
             }
             return {
@@ -93,6 +105,11 @@ function App() {
               board: nextBoard,
               generationCount: prev.generationCount + 1,
               aliveCount: countAlive(nextBoard),
+              populationHistory: [...prev.populationHistory, prev.aliveCount],
+              generationHistory: [
+                ...prev.generationHistory,
+                prev.generationCount,
+              ],
             };
           });
         }, 230);
@@ -103,7 +120,12 @@ function App() {
         clearInterval(timer);
       };
     }
-  }, [boardData.isRunning, boardData.columns]);
+  }, [
+    boardData.isRunning,
+    boardData.columns,
+    boardData.rows,
+    boardData.generationCount,
+  ]);
 
   const boardSizeCallback = (rows, columns) => {
     const newBoard = new Array(rows * columns).fill(false);
@@ -112,6 +134,7 @@ function App() {
       return {
         ...prev,
         columns: columns,
+        rows: rows,
         board: newBoard,
         generationCount: 0,
         aliveCount: 0,
