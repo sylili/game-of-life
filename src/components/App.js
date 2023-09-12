@@ -127,25 +127,6 @@ function App() {
     boardData.generationCount,
   ]);
 
-  const boardSizeCallback = (rows, columns) => {
-    const newBoard = new Array(rows * columns).fill(false);
-    setResetBoard(newBoard);
-    setBoardData((prev) => {
-      return {
-        ...prev,
-        columns: columns,
-        rows: rows,
-        board: newBoard,
-        generationCount: 0,
-        aliveCount: 0,
-        generationHistory: [],
-        populationHistory: [],
-        boardHistory: new Set(),
-        isRunning: STOPPED,
-      };
-    });
-  };
-
   return (
     <div>
       <div>
@@ -169,7 +150,8 @@ function App() {
         <FlexGrow0>
           <BoardSizer
             boardData={boardData}
-            boardSizeCallback={boardSizeCallback}
+            setResetBoard={setResetBoard}
+            setBoardData={setBoardData}
           />
           <H4>Generation count: {boardData.generationCount}</H4>
           <H4>Size of population: {boardData.aliveCount}</H4>

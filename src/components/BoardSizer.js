@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { styled } from "styled-components";
+import { STOPPED } from "../utilities/helper";
 
 const Form = styled.form`
   display: flex;
@@ -20,7 +21,7 @@ const Form = styled.form`
 
 const StyledBoard = styled.section``;
 
-function BoardSizer({ boardData, boardSizeCallback }) {
+function BoardSizer({ boardData, setResetBoard, setBoardData }) {
   const [rows, setRows] = useState(boardData.board.length / boardData.columns);
   const [columns, setColumns] = useState(boardData.columns);
 
@@ -32,8 +33,23 @@ function BoardSizer({ boardData, boardSizeCallback }) {
     setColumns(+event.target.value);
   };
 
-  const submit = (event) => {
-    boardSizeCallback(rows, columns);
+  const submit = () => {
+    const newBoard = new Array(rows * columns).fill(false);
+    setResetBoard(newBoard);
+    setBoardData((prev) => {
+      return {
+        ...prev,
+        columns: columns,
+        rows: rows,
+        board: newBoard,
+        generationCount: 0,
+        aliveCount: 0,
+        generationHistory: [],
+        populationHistory: [],
+        boardHistory: new Set(),
+        isRunning: STOPPED,
+      };
+    });
   };
 
   return (
