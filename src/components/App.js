@@ -40,6 +40,14 @@ const defBoardData = {
   isRunning: STOPPED,
 };
 
+const isBoardEmpty = (prev) => {
+  return isBoardStagnates(prev.board, new Array(prev.board.length).fill(false));
+};
+
+const isBoardStillLife = (prev, nextBoard) => {
+  return isBoardStagnates(prev.board, nextBoard);
+};
+
 function App() {
   const [resetBoard, setResetBoard] = useState(emptyBoard);
   const [boardData, setBoardData] = useState(defBoardData);
@@ -50,66 +58,45 @@ function App() {
       boardData.isRunning === OSCILLATOR
     ) {
       const playAnimation = () =>
-        setInterval(() => {
+        setTimeout(() => {
           setBoardData((prev) => {
+            console.log(boardData.generationCount, boardData.isRunning);
             prev.boardHistory.add(JSON.stringify(prev.board));
             const nextBoard = getNextState(prev.board, boardData.columns);
-            if (prev.boardHistory.has(JSON.stringify(nextBoard))) {
-              if (
-                isBoardStagnates(
-                  prev.board,
-                  new Array(prev.board.length).fill(false)
-                )
-              ) {
-                return {
-                  ...prev,
-                  isRunning: EMPTY,
-                  populationHistory: [
-                    ...prev.populationHistory,
-                    prev.aliveCount,
-                  ],
-                  generationHistory: [
-                    ...prev.generationHistory,
-                    prev.generationCount,
-                  ],
-                };
-              } else if (isBoardStagnates(prev.board, nextBoard)) {
-                return {
-                  ...prev,
-                  isRunning: STILL_LIFE,
-                  populationHistory: [
-                    ...prev.populationHistory,
-                    prev.aliveCount,
-                  ],
-                  generationHistory: [
-                    ...prev.generationHistory,
-                    prev.generationCount,
-                  ],
-                };
-              }
-              return {
-                ...prev,
-                board: nextBoard,
-                generationCount: prev.generationCount + 1,
-                isRunning: OSCILLATOR,
-                aliveCount: countAlive(nextBoard),
-                populationHistory: [...prev.populationHistory, prev.aliveCount],
-                generationHistory: [
-                  ...prev.generationHistory,
-                  prev.generationCount,
-                ],
-              };
-            }
-            return {
+            const next = {
               ...prev,
-              board: nextBoard,
-              generationCount: prev.generationCount + 1,
-              aliveCount: countAlive(nextBoard),
               populationHistory: [...prev.populationHistory, prev.aliveCount],
               generationHistory: [
                 ...prev.generationHistory,
                 prev.generationCount,
               ],
+            };
+            if (prev.boardHistory.has(JSON.stringify(nextBoard))) {
+              if (isBoardEmpty(prev)) {
+                return {
+                  ...next,
+                  isRunning: EMPTY,
+                };
+              } else if (isBoardStillLife(prev, nextBoard)) {
+                return {
+                  ...next,
+                  isRunning: STILL_LIFE,
+                };
+              }
+              return {
+                ...next,
+                board: nextBoard,
+                generationCount: prev.generationCount + 1,
+                aliveCount: countAlive(nextBoard),
+                isRunning: OSCILLATOR,
+              };
+            }
+
+            return {
+              ...next,
+              board: nextBoard,
+              generationCount: prev.generationCount + 1,
+              aliveCount: countAlive(nextBoard),
             };
           });
         }, 230);
@@ -117,7 +104,7 @@ function App() {
       const timer = playAnimation();
 
       return () => {
-        clearInterval(timer);
+        clearTimeout(timer);
       };
     }
   }, [
