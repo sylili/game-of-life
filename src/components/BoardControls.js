@@ -34,6 +34,8 @@ function BoardControls({ boardData, setBoardData, resetBoard }) {
         return {
           ...prev,
           isRunning: STOPPED,
+          populationHistory: [...prev.populationHistory, prev.aliveCount],
+          generationHistory: [...prev.generationHistory, prev.generationCount],
         };
       } else {
         return {
