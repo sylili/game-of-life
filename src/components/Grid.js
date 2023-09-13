@@ -1,10 +1,11 @@
 import { styled } from "styled-components";
 import Cell from "./Cell";
-import { countAlive } from "../utilities/helper";
+import { IN_PROGRESS, OSCILLATOR, countAlive } from "../utilities/helper";
 import { useState } from "react";
 
 export const Wrapper = styled.section`
   grid-template-columns: repeat(${(props) => props.columns}, 1fr);
+  pointer-events: ${(props) => props.isRunning && "none"};
   margin: 0 auto;
   display: grid;
   width: fit-content;
@@ -14,7 +15,13 @@ export const Wrapper = styled.section`
 
 function Grid({ boardData, setBoardData, setResetBoard }) {
   const [mouseDown, setMouseDown] = useState(false);
-
+  let isRunning = false;
+  if (
+    boardData.isRunning === OSCILLATOR ||
+    boardData.isRunning === IN_PROGRESS
+  ) {
+    isRunning = true;
+  }
   const setPosition = (i) => {
     setBoardData((prev) => {
       const nextBoard = [...prev.board];
@@ -25,6 +32,8 @@ function Grid({ boardData, setBoardData, setResetBoard }) {
         ...prev,
         board: nextBoard,
         generationCount: 0,
+        generationHistory: [],
+        populationHistory: [],
         aliveCount: countAlive(nextBoard),
         boardHistory: new Set(),
       };
@@ -54,6 +63,7 @@ function Grid({ boardData, setBoardData, setResetBoard }) {
       onPointerLeave={() => {
         setMouseDown(false);
       }}
+      isRunning={isRunning}
     >
       {grid}
     </Wrapper>
