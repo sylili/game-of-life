@@ -35,10 +35,10 @@ const StyledIcon = styled(BsFillQuestionSquareFill)`
 
 function PopupDesc() {
   return (
-    <div style={{ float: "right" }}>
+    <div data-testid="popup-button" style={{ float: "right" }}>
       <StyledPop modal trigger={<StyledIcon />} nested>
         <Description>
-          <p>
+          <p data-testid="popup-description">
             <A href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
               The Game of Life
             </A>
