@@ -20,9 +20,10 @@ function Cell({ mouseDown, alive, pos, setPosition }) {
   };
   return (
     <div onPointerEnter={handleMouseEnter} onPointerDown={handleClick}>
-      <StyledCell alive={alive} />
+      <StyledCell data-testid={`cell-${pos}`} alive={alive} />
     </div>
   );
 }
 
 export default Cell;
+export { StyledCell };

@@ -12,7 +12,11 @@ const Container = styled.section`
 `;
 
 function ResultMessage({ boardData }) {
-  return <Container>{getMessage(boardData.isRunning)}</Container>;
+  return (
+    <Container data-testid="result-message">
+      {getMessage(boardData.isRunning)}
+    </Container>
+  );
 }
 
 export default ResultMessage;

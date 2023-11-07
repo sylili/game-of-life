@@ -78,14 +78,18 @@ function BoardControls({ boardData, setBoardData, resetBoard }) {
         <Button primary onClick={handleNextClick}>
           Next
         </Button>
-        <Button primary onClick={handlePlayClick}>
+        <Button data-testid="play-button" primary onClick={handlePlayClick}>
           {boardData.isRunning === OSCILLATOR ||
           boardData.isRunning === IN_PROGRESS
             ? "Stop"
             : "Play"}
         </Button>
-        <Button onClick={handleClearBoard}>Clear</Button>
-        <Button onClick={handleResetBoard}>Reset</Button>
+        <Button data-testid="clear-button" onClick={handleClearBoard}>
+          Clear
+        </Button>
+        <Button data-testid="reset-button" onClick={handleResetBoard}>
+          Reset
+        </Button>
       </div>
     </StyledBoardControls>
   );
